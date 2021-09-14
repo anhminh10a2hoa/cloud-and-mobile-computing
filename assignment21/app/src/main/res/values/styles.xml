@@ -1,0 +1,15 @@
+<resources>
+    <!-- Here we define a full screen window theme -->
+    <!--style name="AppTheme" parent="Theme.AppCompat"-->
+    <!-- Here we define a dialog window theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!--Here we define a theme with no action bar and no windo title-->
+    <style name="AppTheme.NoTitle">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>
