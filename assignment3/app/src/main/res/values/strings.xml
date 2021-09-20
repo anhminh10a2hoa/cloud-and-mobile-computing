@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">assignment3</string>
+    <string name="app_message">Orientation Detection App</string>
+    <string name="dev_orien_txt">Device Orientation</string>
+    <string name="orient_port_txt">PORTRAIT ORIENTATION</string>
+    <string name="orient_land_txt">LANDSCAPE ORIENTATION</string>
+    <string name="orient_def_txt">DEFAULT ORIENTATION</string>
+    <string name="label_firstname_text">First name</string>
+    <string name="label_lastname_text">Last name</string>
+    <string name="label_birthday" >Birthday</string>
+    <string name="label_address" >Address</string>
+    <string name="label_email" >Email</string>
+    <string name="label_phone_text">Phone number</string>
+    <string name="button_reset_text">Reset</string>
+    <string name="button_send_text">Send</string>
+</resources>
