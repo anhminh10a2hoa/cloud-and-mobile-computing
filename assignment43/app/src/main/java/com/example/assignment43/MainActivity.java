@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button buttonDivide;
     Button buttonEqual;
     TextView textView;
+    TextView textError;
     private String expression = "";
 
     @Override
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button0 = (Button) findViewById(R.id.button);
+        button0 = findViewById(R.id.button);
         button0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button1 = (Button) findViewById(R.id.button2);
+        button1 = findViewById(R.id.button2);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button2 = (Button) findViewById(R.id.button3);
+        button2 = findViewById(R.id.button3);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button3 = (Button) findViewById(R.id.button4);
+        button3 = findViewById(R.id.button4);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,15 +65,15 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button4 = (Button) findViewById(R.id.button5);
+        button4 = findViewById(R.id.button5);
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expression+='5';
+                expression+='4';
                 textView.setText(expression);
             }
         });
-        button5 = (Button) findViewById(R.id.button6);
+        button5 = findViewById(R.id.button6);
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button6 = (Button) findViewById(R.id.button19);
+        button6 = findViewById(R.id.button19);
         button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button7 = (Button) findViewById(R.id.button20);
+        button7 = findViewById(R.id.button20);
         button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button8 = (Button) findViewById(R.id.button21);
+        button8 = findViewById(R.id.button21);
         button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        button9 = (Button) findViewById(R.id.button22);
+        button9 = findViewById(R.id.button22);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,15 +113,28 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        buttonDel = (Button) findViewById(R.id.button23);
+        buttonDel = findViewById(R.id.button23);
         buttonDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expression=expression.substring(0, expression.length() - 1);
-                textView.setText(expression);
+                if(expression.length() == 0) {
+                    String error = "can not delete";
+                    textError.setText(error);
+                    new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                textError.setText("");
+                            }
+                        },
+           3000);
+                } else {
+                    expression=expression.substring(0, expression.length() - 1);
+                    textView.setText(expression);
+                }
+
             }
         });
-        buttonPlus = (Button) findViewById(R.id.button24);
+        buttonPlus = findViewById(R.id.button24);
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        buttonMinus = (Button) findViewById(R.id.button25);
+        buttonMinus = findViewById(R.id.button25);
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        buttonMultiply = (Button) findViewById(R.id.button26);
+        buttonMultiply = findViewById(R.id.button26);
         buttonMultiply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,27 +158,28 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(expression);
             }
         });
-        buttonDivide = (Button) findViewById(R.id.button27);
+        buttonDivide = findViewById(R.id.button27);
         buttonDivide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expression+=':';
+                expression+='/';
                 textView.setText(expression);
             }
         });
-        buttonEqual = (Button) findViewById(R.id.button7);
+        buttonEqual = findViewById(R.id.button7);
         buttonEqual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newResult = eval(expression);
-                expression=Integer.toString(newResult);
-                textView.setText(Integer.toString(newResult));
+                Double newResult = eval(expression);
+                expression=Double.toString(newResult);
+                textView.setText(Double.toString(newResult));
             }
         });
-        textView = (TextView) findViewById(R.id.text);
+        textView = findViewById(R.id.text);
+        textError = findViewById(R.id.text_error);
     }
 
-    public int eval(final String str) {
+    public static double eval(final String str) {
         return new Object() {
             int pos = -1, ch;
 
@@ -181,9 +196,9 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
-            int parse() {
+            double parse() {
                 nextChar();
-                int x = parseExpression();
+                double x = parseExpression();
                 if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
                 return x;
             }
@@ -194,8 +209,8 @@ public class MainActivity extends AppCompatActivity {
             // factor = `+` factor | `-` factor | `(` expression `)`
             //        | number | functionName factor | factor `^` factor
 
-            int parseExpression() {
-                int x = parseTerm();
+            double parseExpression() {
+                double x = parseTerm();
                 for (;;) {
                     if      (eat('+')) x += parseTerm(); // addition
                     else if (eat('-')) x -= parseTerm(); // subtraction
@@ -203,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            int parseTerm() {
-                int x = parseFactor();
+            double parseTerm() {
+                double x = parseFactor();
                 for (;;) {
                     if      (eat('*')) x *= parseFactor(); // multiplication
                     else if (eat('/')) x /= parseFactor(); // division
@@ -212,21 +227,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            int parseFactor() {
+            double parseFactor() {
                 if (eat('+')) return parseFactor(); // unary plus
                 if (eat('-')) return -parseFactor(); // unary minus
 
-                int x;
+                double x;
                 int startPos = this.pos;
                 if (eat('(')) { // parentheses
                     x = parseExpression();
                     eat(')');
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
-                    x = Integer.parseInt(str.substring(startPos, this.pos));
+                    x = Double.parseDouble(str.substring(startPos, this.pos));
+                } else if (ch >= 'a' && ch <= 'z') { // functions
+                    while (ch >= 'a' && ch <= 'z') nextChar();
+                    String func = str.substring(startPos, this.pos);
+                    x = parseFactor();
+                    if (func.equals("sqrt")) x = Math.sqrt(x);
+                    else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+                    else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+                    else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+                    else throw new RuntimeException("Unknown function: " + func);
                 } else {
                     throw new RuntimeException("Unexpected: " + (char)ch);
                 }
+
+                if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
 
                 return x;
             }
