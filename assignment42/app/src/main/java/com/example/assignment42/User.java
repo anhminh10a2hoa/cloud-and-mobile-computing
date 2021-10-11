@@ -9,13 +9,19 @@ import java.time.LocalDate;
 public class User {
     private String username;
     private String comment;
-    private LocalDate date;
+    private String date;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     User(String username, String comment) {
         this.username = username;
         this.comment = comment;
-        this.date = LocalDate.now();
+        this.date = LocalDate.now().toString();
+    }
+
+    User(String username, String comment, String date) {
+        this.username = username;
+        this.comment = comment;
+        this.date = date;
     }
 
     public String toString() {
@@ -31,7 +37,7 @@ public class User {
         return this.comment;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return this.date;
     }
 }

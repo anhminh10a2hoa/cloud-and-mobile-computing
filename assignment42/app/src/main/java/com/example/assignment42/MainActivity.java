@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        User user1 = new User("minh", "minh says hello", "2021-10-10");
+        User user2 = new User("toan", "toan says hi", "2021-10-10");
+        User user3 = new User("mg", "mg says welcome", "2021-10-10");
+        data.add(user1);
+        data.add(user2);
+        data.add(user3);
 
         username_input = findViewById(R.id.editTextTextPersonName);
         comment_input = findViewById(R.id.editTextTextPersonName2);
@@ -67,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 search_result.setText("hello");
                 Integer i = 1;
                 for (User user : data) {
-                    if(user.getComment().contains(comment) && user.getDate().toString().contains(date)) {
+                    if(user.getComment().contains(comment) && user.getDate().contains(date)) {
                         res += "Number " + i + "\n";
                         res += user.toString();
                     }
