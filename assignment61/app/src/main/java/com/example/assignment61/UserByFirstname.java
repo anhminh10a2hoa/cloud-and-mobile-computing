@@ -1,23 +1,22 @@
 package com.example.assignment61;
 
-public class User {
+public class UserByFirstname {
     private String firstname;
     private String lastname;
     private String phonenumber;
+    private String educationLevel;
+    private String hoobies;
 
-    User(String firstname, String lastname, String phonenumber) {
+    UserByFirstname(String firstname, String lastname, String phonenumber, String educationLevel, String hoobies) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phonenumber = phonenumber;
+        this.educationLevel = educationLevel;
+        this.hoobies = hoobies;
     }
 
     public String toString() {
-        String res = "";
-        res += firstname + "-";
-        res += lastname + "-";
-        res += phonenumber;
-
-        return res;
+        return firstname + "-" + lastname + "-" + phonenumber + "-" + educationLevel + "-" + hoobies;
     }
 
     public String getFirstname() {
