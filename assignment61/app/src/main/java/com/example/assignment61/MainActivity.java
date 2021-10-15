@@ -58,11 +58,102 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 index = arg0.getSelectedItemPosition();
-                Toast.makeText(getApplicationContext(), "Selected item: " + educationArray[index], Toast.LENGTH_SHORT).show();;
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
+            }
+        });
+
+        //Here we define the AutoCompleteTextView object
+        autoCompleteTextViewFirstname = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        ArrayAdapter<UserByFirstname> arrayAdapterFirstName = new ArrayAdapter<UserByFirstname>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByFirstname);
+        //Here we set the text color
+        autoCompleteTextViewFirstname.setTextColor(Color.RED);
+        //Here we define the required number of letters to be typed in the AutoCompleteTextView
+        //green color for displayed hint
+        autoCompleteTextViewFirstname.setHintTextColor(Color.MAGENTA);
+        autoCompleteTextViewFirstname.setThreshold(1);
+        //Here we set the array adapter for the AutoCompleteTextView
+        autoCompleteTextViewFirstname.setAdapter(arrayAdapterFirstName);
+
+        //Here we define ItemClickListener for the AutoCompleteTextView instance
+        autoCompleteTextViewFirstname.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
+                String text = autoCompleteTextViewFirstname.getText().toString();
+                //Here we set the text of the AutocompleteTextView to the modified text
+                autoCompleteTextViewFirstname.setText(text);
+            }
+        });
+
+        //Here we define the AutoCompleteTextView object
+        autoCompleteTextViewLastname = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView4);
+        ArrayAdapter<UserByLastname> arrayAdapterLastName = new ArrayAdapter<UserByLastname>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByLastname);
+        //Here we set the text color
+        autoCompleteTextViewLastname.setTextColor(Color.RED);
+        //Here we define the required number of letters to be typed in the AutoCompleteTextView
+        //green color for displayed hint
+        autoCompleteTextViewLastname.setHintTextColor(Color.MAGENTA);
+        autoCompleteTextViewLastname.setThreshold(1);
+        //Here we set the array adapter for the AutoCompleteTextView
+        autoCompleteTextViewLastname.setAdapter(arrayAdapterLastName);
+
+        //Here we define ItemClickListener for the AutoCompleteTextView instance
+        autoCompleteTextViewLastname.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
+                String text = autoCompleteTextViewLastname.getText().toString();
+                //Here we set the text of the AutocompleteTextView to the modified text
+                autoCompleteTextViewFirstname.setText(text);
+            }
+        });
+
+        //Here we define the AutoCompleteTextView object
+        autoCompleteTextViewPhonenumber = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView5);
+        ArrayAdapter<UserByPhonenumber> arrayAdapterPhoneNumber = new ArrayAdapter<UserByPhonenumber>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByPhonenumber);
+        //Here we set the text color
+        autoCompleteTextViewPhonenumber.setTextColor(Color.RED);
+        //Here we define the required number of letters to be typed in the AutoCompleteTextView
+        //green color for displayed hint
+        autoCompleteTextViewPhonenumber.setHintTextColor(Color.MAGENTA);
+        autoCompleteTextViewPhonenumber.setThreshold(1);
+        //Here we set the array adapter for the AutoCompleteTextView
+        autoCompleteTextViewPhonenumber.setAdapter(arrayAdapterPhoneNumber);
+
+        //Here we define ItemClickListener for the AutoCompleteTextView instance
+        autoCompleteTextViewPhonenumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
+                String text = autoCompleteTextViewPhonenumber.getText().toString();
+                //Here we set the text of the AutocompleteTextView to the modified text
+                autoCompleteTextViewFirstname.setText(text);
+            }
+        });
+
+        //Here we define the AutoCompleteTextView object
+        autoCompleteTextViewEducationLevel = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView2);
+        ArrayAdapter<UserByEducationLevel> arrayAdapterEducationLevel = new ArrayAdapter<UserByEducationLevel>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByEducationLevel);
+        //Here we set the text color
+        autoCompleteTextViewEducationLevel.setTextColor(Color.RED);
+        //Here we define the required number of letters to be typed in the AutoCompleteTextView
+        //green color for displayed hint
+        autoCompleteTextViewEducationLevel.setHintTextColor(Color.MAGENTA);
+        autoCompleteTextViewEducationLevel.setThreshold(1);
+        //Here we set the array adapter for the AutoCompleteTextView
+        autoCompleteTextViewEducationLevel.setAdapter(arrayAdapterEducationLevel);
+
+        //Here we define ItemClickListener for the AutoCompleteTextView instance
+        autoCompleteTextViewEducationLevel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
+                String text = autoCompleteTextViewEducationLevel.getText().toString();
+                //Here we set the text of the AutocompleteTextView to the modified text
+                autoCompleteTextViewFirstname.setText(text);
             }
         });
 
@@ -89,9 +180,14 @@ public class MainActivity extends AppCompatActivity {
                     lastname_input.setText("");
                     phonenumber_input.setText("");
                     String hoobies = "";
-                    if (v instanceof CheckBox) {
-                        CheckBox checkBox = (CheckBox) v;
-                        hoobies = checkBox.getText().toString();
+                    if(readingCB.isChecked()) {
+                        hoobies += getString(R.string.reading) + ",";
+                    }
+                    if(sportCB.isChecked()) {
+                        hoobies += getString(R.string.sports) + ",";
+                    }
+                    if(listeningCB.isChecked()) {
+                        hoobies += getString(R.string.listening) + ",";
                     }
                     fullInfoByFirstname.add(new UserByFirstname(firstname, lastname, phonenumber, educationArray[index], hoobies));
                     fullInfoByLastname.add(new UserByLastname(lastname, firstname, phonenumber, educationArray[index], hoobies));
@@ -101,96 +197,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Here we define the AutoCompleteTextView object
-        autoCompleteTextViewFirstname = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        ArrayAdapter<UserByFirstname> arrayAdapterFirstName = new ArrayAdapter<UserByFirstname>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByFirstname);
-        //Here we set the text color
-        autoCompleteTextViewFirstname.setTextColor(Color.RED);
-        //Here we define the required number of letters to be typed in the AutoCompleteTextView
-        //green color for displayed hint
-        autoCompleteTextViewFirstname.setHintTextColor(Color.MAGENTA);
-        autoCompleteTextViewFirstname.setThreshold(1);
-        //Here we set the array adapter for the AutoCompleteTextView
-        autoCompleteTextViewFirstname.setAdapter(arrayAdapterFirstName);
-
-        //Here we define ItemClickListener for the AutoCompleteTextView instance
-        autoCompleteTextViewFirstname.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
-                String text = autoCompleteTextViewFirstname.getText().toString();
-                //Here we set the text of the AutocompleteTextView to the modified text
-                autoCompleteTextViewFirstname.setText(text.split("-")[0]);
-            }
-        });
-
-        //Here we define the AutoCompleteTextView object
-        autoCompleteTextViewLastname = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView4);
-        ArrayAdapter<UserByLastname> arrayAdapterLastName = new ArrayAdapter<UserByLastname>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByLastname);
-        //Here we set the text color
-        autoCompleteTextViewLastname.setTextColor(Color.RED);
-        //Here we define the required number of letters to be typed in the AutoCompleteTextView
-        //green color for displayed hint
-        autoCompleteTextViewLastname.setHintTextColor(Color.MAGENTA);
-        autoCompleteTextViewLastname.setThreshold(1);
-        //Here we set the array adapter for the AutoCompleteTextView
-        autoCompleteTextViewLastname.setAdapter(arrayAdapterLastName);
-
-        //Here we define ItemClickListener for the AutoCompleteTextView instance
-        autoCompleteTextViewLastname.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
-                String text = autoCompleteTextViewLastname.getText().toString();
-                //Here we set the text of the AutocompleteTextView to the modified text
-                autoCompleteTextViewLastname.setText(text.split("-")[0]);
-            }
-        });
-
-        //Here we define the AutoCompleteTextView object
-        autoCompleteTextViewPhonenumber = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView5);
-        ArrayAdapter<UserByPhonenumber> arrayAdapterPhoneNumber = new ArrayAdapter<UserByPhonenumber>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByPhonenumber);
-        //Here we set the text color
-        autoCompleteTextViewPhonenumber.setTextColor(Color.RED);
-        //Here we define the required number of letters to be typed in the AutoCompleteTextView
-        //green color for displayed hint
-        autoCompleteTextViewPhonenumber.setHintTextColor(Color.MAGENTA);
-        autoCompleteTextViewPhonenumber.setThreshold(1);
-        //Here we set the array adapter for the AutoCompleteTextView
-        autoCompleteTextViewPhonenumber.setAdapter(arrayAdapterPhoneNumber);
-
-        //Here we define ItemClickListener for the AutoCompleteTextView instance
-        autoCompleteTextViewPhonenumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
-                String text = autoCompleteTextViewPhonenumber.getText().toString();
-                //Here we set the text of the AutocompleteTextView to the modified text
-                autoCompleteTextViewPhonenumber.setText(text.split("-")[0]);
-            }
-        });
-
-        //Here we define the AutoCompleteTextView object
-        autoCompleteTextViewEducationLevel = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView2);
-        ArrayAdapter<UserByEducationLevel> arrayAdapterEducationLevel = new ArrayAdapter<UserByEducationLevel>(this, android.R.layout.simple_dropdown_item_1line, fullInfoByEducationLevel);
-        //Here we set the text color
-        autoCompleteTextViewEducationLevel.setTextColor(Color.RED);
-        //Here we define the required number of letters to be typed in the AutoCompleteTextView
-        //green color for displayed hint
-        autoCompleteTextViewEducationLevel.setHintTextColor(Color.MAGENTA);
-        autoCompleteTextViewEducationLevel.setThreshold(1);
-        //Here we set the array adapter for the AutoCompleteTextView
-        autoCompleteTextViewEducationLevel.setAdapter(arrayAdapterEducationLevel);
-
-        //Here we define ItemClickListener for the AutoCompleteTextView instance
-        autoCompleteTextViewEducationLevel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Here we get a copy of the text searched from the AutocompleteTextView and then modify it
-                String text = autoCompleteTextViewEducationLevel.getText().toString();
-                //Here we set the text of the AutocompleteTextView to the modified text
-                autoCompleteTextViewEducationLevel.setText(text.split("-")[0]);
-            }
-        });
     }
 }

@@ -18,16 +18,4 @@ public class UserByPhonenumber {
     public String toString() {
         return phonenumber + "-" + firstname + "-" + lastname + "-" + educationLevel + "-" + hoobies;
     }
-
-    public String getFirstname() {
-        return this.firstname;
-    }
-
-    public String getLastname() {
-        return this.lastname;
-    }
-
-    public String getPhonenumber() {
-        return this.phonenumber;
-    }
 }

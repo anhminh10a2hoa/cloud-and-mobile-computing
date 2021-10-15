@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:width="250dp"
+        android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.783"
         app:layout_constraintStart_toEndOf="@+id/textView8"
@@ -85,11 +86,12 @@
         android:id="@+id/autoCompleteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="8dp"
         android:width="250dp"
+        android:textSize="8sp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
+        app:layout_constraintHorizontal_bias="0.292"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/button" />
 
@@ -98,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="268dp"
+        android:layout_marginTop="208dp"
         android:text="First name search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -107,8 +109,8 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="Last name search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -118,6 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="250dp"
+        android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.215"
         app:layout_constraintStart_toEndOf="@+id/textView5"
@@ -128,6 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="250dp"
+        android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -137,7 +141,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="phone number search"
         app:layout_constraintStart_toStartOf="parent"
@@ -176,8 +180,8 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="Education search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -186,7 +190,7 @@
         android:id="@+id/chkbox_sports"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Football"
+        android:text="@string/sports"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chkbox_reading" />
 
@@ -196,7 +200,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Reading books"
+        android:text="@string/reading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner2" />
@@ -206,7 +210,7 @@
         style="?android:attr/starStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Listening music"
+        android:text="@string/listening"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chkbox_sports" />
 
