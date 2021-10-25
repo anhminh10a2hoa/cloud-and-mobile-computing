@@ -10,6 +10,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment7">
         <activity
+            android:name=".Update"
+            android:exported="true"
+            android:label="@string/title_activity_update">
+            <intent-filter>
+                <action android:name="myapp.AddActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".All"
+            android:exported="true"
+            android:label="@string/title_activity_all">
+            <intent-filter>
+                <action android:name="myapp.AddActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Search"
+            android:exported="true"
+            android:label="@string/title_activity_search">
+            <intent-filter>
+                <action android:name="myapp.SearchActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

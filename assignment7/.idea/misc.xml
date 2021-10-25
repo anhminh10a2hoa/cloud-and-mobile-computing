@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/cloud-and-mobile-computing/assignment7/app/src/main/res/layout/activity_all.xml" value="0.21" />
         <entry key="..\:/cloud-and-mobile-computing/assignment7/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/cloud-and-mobile-computing/assignment7/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/cloud-and-mobile-computing/assignment7/app/src/main/res/layout/activity_update.xml" value="0.2708333333333333" />
       </map>
     </option>
   </component>
