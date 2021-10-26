@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     int searchRequestCode = 1;
-    int addRequestCode = 2;
+    int allRequestCode = 2;
     int updateRequestCode = 3;
 
     private Button addBtn;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private void startActivityAll() {
         Intent intent = new Intent(getApplication(), All.class);
         intent.putExtra("data", meetingArrayList);
-        startActivityForResult(intent, addRequestCode);
+        startActivityForResult(intent, allRequestCode);
     }
 
     private void startActivityUpdate() {

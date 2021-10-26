@@ -22,6 +22,7 @@ public class Update extends AppCompatActivity {
     private EditText participantsEt;
     private EditText startDateEt;
     private EditText startTimeEt;
+    private TextView errorTv;
     private Boolean isIdExist = false;
     private Button updateBtn;
     private Button backBtn;
@@ -38,6 +39,7 @@ public class Update extends AppCompatActivity {
         participantsEt = findViewById(R.id.editTextTextPersonName2);
         startDateEt = findViewById(R.id.editTextDate);
         startTimeEt = findViewById(R.id.editTextTime2);
+        errorTv = findViewById(R.id.textView10);
         updateBtn = findViewById(R.id.button4);
         backBtn = findViewById(R.id.button9);
         backBtn.setOnClickListener(backClickListener);
@@ -61,7 +63,11 @@ public class Update extends AppCompatActivity {
                         participantsEt.setText(m.getParticipants());
                         startDateEt.setText(date[0]);
                         startTimeEt.setText(date[1]);
+                        errorTv.setText("");
                     }
+                } if(isIdExist == false) {
+                    errorTv.setText("id " + id +" does not exist!");
+                    errorTv.setTextColor(Color.RED);
                 }
             }
         });
