@@ -5,6 +5,7 @@
     <string name="update">Update</string>
     <string name="search">Search</string>
     <string name="meeting_title">Meeting title</string>
+    <string name="setting_title">Setting title</string>
     <string name="participants">Participants</string>
     <string name="start_date">Start date</string>
     <string name="start_time">Start time</string>

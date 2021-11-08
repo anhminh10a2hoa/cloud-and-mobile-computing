@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeTv;
     private Button datePickerBtn;
     private TextView dateTv;
+    private Button settingBtn;
+    private String preferencesName = "my_setting";
+
+    private TextView titleTv;
+    private TextView meetingTitleTv;
+    private TextView participantsTv;
+    private TextView startDateTv;
+    private TextView startTimeTv;
+    private TextView dateInputTv;
+    private TextView timeInputTv;
+
     DialogFragment newFragment;
     ArrayList<Meeting> meetingArrayList = new ArrayList<Meeting>();
 
@@ -39,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //set background color
+        SharedPreferences loadedSharedPrefs = getSharedPreferences(preferencesName, MODE_PRIVATE);
+
+        getWindow().getDecorView().setBackgroundColor(loadedSharedPrefs.getInt("backgroundcolor", getResources().getColor(android.R.color.white)));
 
         addBtn = findViewById(R.id.button);
         updateBtn = findViewById(R.id.button2);
@@ -51,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         datePickerBtn = findViewById(R.id.date_button);
         timeTv = findViewById(R.id.textView12);
         dateTv = findViewById(R.id.textView11);
+        settingBtn = findViewById(R.id.button10);
+        titleTv = findViewById(R.id.textView);
+        meetingTitleTv= findViewById(R.id.textView2);
+        participantsTv= findViewById(R.id.textView3);
+        startDateTv= findViewById(R.id.textView4);
+        startTimeTv= findViewById(R.id.textView5);
+        dateInputTv= findViewById(R.id.button11);
+        timeInputTv= findViewById(R.id.button12);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -66,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         updateBtn.setOnClickListener(updateClickListener);
 
         searchBtn.setOnClickListener(searchClickListener);
+
+        settingBtn.setOnClickListener(settingClickListener);
 
         allBtn.setOnClickListener(allClickListener);
 
@@ -118,6 +145,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        set font size font color
+        float fontSize = loadedSharedPrefs.getFloat("fontsize", 14.0f);
+        titleTv.setTextSize(fontSize);
+        meetingTitleTv.setTextSize(fontSize);
+        participantsTv.setTextSize(fontSize);
+        startDateTv.setTextSize(fontSize);
+        startTimeTv.setTextSize(fontSize);
+
+        int fontColor = loadedSharedPrefs.getInt("fontcolor", getResources().getColor(android.R.color.black));
+        titleTv.setTextColor(fontColor);
+        meetingTitleTv.setTextColor(fontColor);
+        participantsTv.setTextColor(fontColor);
+        startDateTv.setTextColor(fontColor);
+        startTimeTv.setTextColor(fontColor);
     }
 
     private void startActivity() {
@@ -135,6 +177,11 @@ public class MainActivity extends AppCompatActivity {
     private void startActivityUpdate() {
         Intent intent = new Intent(getApplication(), Update.class);
         intent.putExtra("data", meetingArrayList);
+        startActivityForResult(intent, updateRequestCode);
+    }
+
+    private void startActivitySetting() {
+        Intent intent = new Intent(getApplication(), setting.class);
         startActivityForResult(intent, updateRequestCode);
     }
 
@@ -156,6 +203,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             startActivityUpdate();
+        }
+    };
+
+    private View.OnClickListener settingClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startActivitySetting();
         }
     };
 

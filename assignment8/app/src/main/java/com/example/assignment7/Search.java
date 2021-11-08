@@ -3,6 +3,7 @@ package com.example.assignment7;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +21,9 @@ public class Search extends AppCompatActivity {
     private TextView dataTv;
     private EditText searchTimeEt;
     private EditText searchParticipantsEt;
+    private String preferencesName = "my_setting";
+    private TextView searchTimeTv;
+    private TextView searchParticipantsTv;
     ArrayList<Meeting> data = new ArrayList<Meeting>();
 
     @Override
@@ -27,12 +31,29 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        SharedPreferences loadedSharedPrefs = getSharedPreferences(preferencesName, MODE_PRIVATE);
+
+        getWindow().getDecorView().setBackgroundColor(loadedSharedPrefs.getInt("backgroundcolor", getResources().getColor(android.R.color.white)));
+
         searchButton = findViewById(R.id.button6);
         backButton = findViewById(R.id.button7);
         searchTimeEt = findViewById(R.id.editTextTextPersonName3);
         searchParticipantsEt = findViewById(R.id.editTextTextPersonName4);
+        searchTimeTv = findViewById(R.id.textView7);
+        searchParticipantsTv = findViewById(R.id.textView8);
         dataTv = findViewById(R.id.textView9);
         backButton.setOnClickListener(backClickListener);
+
+        //        set font size font color
+        float fontSize = loadedSharedPrefs.getFloat("fontsize", 14.0f);
+        searchTimeTv.setTextSize(fontSize);
+        searchParticipantsTv.setTextSize(fontSize);
+        dataTv.setTextSize(fontSize);
+
+        int fontColor = loadedSharedPrefs.getInt("fontcolor", getResources().getColor(android.R.color.black));
+        searchTimeTv.setTextColor(fontColor);
+        searchParticipantsTv.setTextColor(fontColor);
+        dataTv.setTextColor(fontColor);
 
         Bundle extras = getIntent().getExtras();
         if(extras.size() != 0) {

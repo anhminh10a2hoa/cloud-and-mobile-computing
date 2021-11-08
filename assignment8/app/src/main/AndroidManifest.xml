@@ -30,6 +30,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".setting"
+            android:exported="true"
+            android:label="@string/setting_title">
+            <intent-filter>
+                <action android:name="myapp.AddActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Search"
             android:exported="true"
             android:label="@string/title_activity_search">
