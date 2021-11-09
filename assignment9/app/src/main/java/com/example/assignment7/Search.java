@@ -21,7 +21,6 @@ public class Search extends AppCompatActivity {
     private TextView dataTv;
     private EditText searchTimeEt;
     private EditText searchParticipantsEt;
-    private String preferencesName = "my_setting";
     private TextView searchTimeTv;
     private TextView searchParticipantsTv;
     String backgroundColor = "";
@@ -46,23 +45,26 @@ public class Search extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras.size() != 0) {
             data = (ArrayList<Meeting>)extras.getSerializable("data");
-            backgroundColor = extras.getString("backgroundcolor");
-            fontColor = extras.getString("fontcolor");
-            fontSize = extras.getString("fontsize");
-            if(fontSize != "") {
-                float fontSizeZ = Float.parseFloat(fontSize);
+            String backgroundColorE = extras.getString("backgroundcolor");
+            String fontColorE = extras.getString("fontcolor");
+            String fontSizeE = extras.getString("fontsize");
+            if(!fontSizeE.isEmpty()) {
+                fontSize = fontSizeE;
+                float fontSizeZ = Float.parseFloat(fontSizeE);
                 searchTimeTv.setTextSize(fontSizeZ);
                 searchParticipantsTv.setTextSize(fontSizeZ);
                 dataTv.setTextSize(fontSizeZ);
             }
-            if(fontColor != "") {
-                int fontColorZ = Integer.parseInt(fontColor);
+            if(!fontColorE.isEmpty()) {
+                fontColor = fontColorE;
+                int fontColorZ = Integer.parseInt(fontColorE);
                 searchTimeTv.setTextColor(fontColorZ);
                 searchParticipantsTv.setTextColor(fontColorZ);
                 dataTv.setTextColor(fontColorZ);
             }
-            if(backgroundColor != "") {
-                int backgroundColorZ = Integer.parseInt(backgroundColor);
+            if(!backgroundColorE.isEmpty()) {
+                backgroundColor = backgroundColorE;
+                int backgroundColorZ = Integer.parseInt(backgroundColorE);
                 getWindow().getDecorView().setBackgroundColor(backgroundColorZ);
             }
         }
@@ -124,15 +126,9 @@ public class Search extends AppCompatActivity {
     private void startActivity() {
         Intent intent = new Intent(getApplication(), MainActivity.class);
         intent.putExtra("data", data);
-        if(!fontSize.isEmpty()) {
-            intent.putExtra("fontsize", fontSize);
-        }
-        if(!fontColor.isEmpty()) {
-            intent.putExtra("fontcolor", fontColor);
-        }
-        if(!backgroundColor.isEmpty()) {
-            intent.putExtra("backgroundcolor", backgroundColor);
-        }
+        intent.putExtra("fontsize", fontSize);
+        intent.putExtra("fontcolor", fontColor);
+        intent.putExtra("backgroundcolor", backgroundColor);
         startActivityForResult(intent, mainRequestCode);
     }
 

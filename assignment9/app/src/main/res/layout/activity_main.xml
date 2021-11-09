@@ -199,8 +199,8 @@
 
     <Button
         android:id="@+id/button17"
-        android:layout_width="409dp"
-        android:layout_height="39dp"
+        android:layout_width="413dp"
+        android:layout_height="44dp"
         android:text="Load setting from file"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button16" />

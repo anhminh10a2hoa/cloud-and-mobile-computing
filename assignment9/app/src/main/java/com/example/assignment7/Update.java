@@ -72,11 +72,12 @@ public class Update extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             meetingArrayList = (ArrayList<Meeting>)extras.getSerializable("data");
-            backgroundColor = extras.getString("backgroundcolor");
-            fontColor = extras.getString("fontcolor");
-            fontSize = extras.getString("fontsize");
-            if(fontSize != "") {
-                float fontSizeZ = Float.parseFloat(fontSize);
+            String backgroundColorE = extras.getString("backgroundcolor");
+            String fontColorE = extras.getString("fontcolor");
+            String fontSizeE = extras.getString("fontsize");
+            if(!fontSizeE.isEmpty()) {
+                fontSize = fontSizeE;
+                float fontSizeZ = Float.parseFloat(fontSizeE);
                 titleTv.setTextSize(fontSizeZ);
                 meetingId.setTextSize(fontSizeZ);
                 meetingTitleTv.setTextSize(fontSizeZ);
@@ -84,8 +85,9 @@ public class Update extends AppCompatActivity {
                 startDateTv.setTextSize(fontSizeZ);
                 startTimeTv.setTextSize(fontSizeZ);
             }
-            if(fontColor != "") {
-                int fontColorZ = Integer.parseInt(fontColor);
+            if(!fontColorE.isEmpty()) {
+                fontColor = fontColorE;
+                int fontColorZ = Integer.parseInt(fontColorE);
                 titleTv.setTextColor(fontColorZ);
                 meetingId.setTextColor(fontColorZ);
                 meetingTitleTv.setTextColor(fontColorZ);
@@ -93,8 +95,9 @@ public class Update extends AppCompatActivity {
                 startDateTv.setTextColor(fontColorZ);
                 startTimeTv.setTextColor(fontColorZ);
             }
-            if(backgroundColor != "") {
-                int backgroundColorZ = Integer.parseInt(backgroundColor);
+            if(!backgroundColorE.isEmpty()) {
+                backgroundColor = backgroundColorE;
+                int backgroundColorZ = Integer.parseInt(backgroundColorE);
                 getWindow().getDecorView().setBackgroundColor(backgroundColorZ);
             }
         }
@@ -184,15 +187,9 @@ public class Update extends AppCompatActivity {
     private void startActivity() {
         Intent intent = new Intent(getApplication(), MainActivity.class);
         intent.putExtra("data", meetingArrayList);
-        if(!fontSize.isEmpty()) {
-            intent.putExtra("fontsize", fontSize);
-        }
-        if(!fontColor.isEmpty()) {
-            intent.putExtra("fontcolor", fontColor);
-        }
-        if(!backgroundColor.isEmpty()) {
-            intent.putExtra("backgroundcolor", backgroundColor);
-        }
+        intent.putExtra("fontsize", fontSize);
+        intent.putExtra("fontcolor", fontColor);
+        intent.putExtra("backgroundcolor", backgroundColor);
         startActivityForResult(intent, mainRequestCode);
     }
 

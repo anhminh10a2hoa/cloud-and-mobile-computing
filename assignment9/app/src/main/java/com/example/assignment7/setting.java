@@ -22,12 +22,10 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class setting extends AppCompatActivity {
     int mainRequestCode = 0;
-    private SharedPreferences sharedPreferences;
     private Button colorBtn;
     private Button backBtn;
     private Button fontColorBtn;
     int mDefaultColor;
-    private String preferencesName = "my_setting";
 
     private TextView backgroundTv;
     private TextView fontcolorTv;
@@ -49,7 +47,6 @@ public class setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         mDefaultColor = getResources().getColor(android.R.color.white);
-        sharedPreferences = getSharedPreferences(preferencesName, MODE_PRIVATE);
 
         colorBtn = findViewById(R.id.button11);
         colorBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,34 +72,37 @@ public class setting extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            backgroundColor = extras.getString("backgroundcolor");
-            fontColor = extras.getString("fontcolor");
-            fontSize = extras.getString("fontsize");
+            String backgroundColorE = extras.getString("backgroundcolor");
+            String fontColorE = extras.getString("fontcolor");
+            String fontSizeE = extras.getString("fontsize");
 
-            if(backgroundColor != "") {
-                getWindow().getDecorView().setBackgroundColor(Integer.parseInt(backgroundColor));
+            if(!backgroundColorE.isEmpty()) {
+                backgroundColor = backgroundColorE;
+                getWindow().getDecorView().setBackgroundColor(Integer.parseInt(backgroundColorE));
             }
-            if(fontSize != "") {
-                fontsizeEt.setText(String.valueOf(fontSize));
-                backgroundTv.setTextSize(Float.parseFloat(fontSize));
-                fontcolorTv.setTextSize(Float.parseFloat(fontSize));
-                fontsizeTv.setTextSize(Float.parseFloat(fontSize));
+            if(!fontSizeE.isEmpty()) {
+                fontSize = fontSizeE;
+                fontsizeEt.setText(fontSizeE);
+                backgroundTv.setTextSize(Float.parseFloat(fontSizeE));
+                fontcolorTv.setTextSize(Float.parseFloat(fontSizeE));
+                fontsizeTv.setTextSize(Float.parseFloat(fontSizeE));
             } else {
                 fontsizeEt.setText("14");
             }
-            if(fontColor != "") {
-                backgroundTv.setTextColor(Integer.parseInt(fontColor));
-                fontcolorTv.setTextColor(Integer.parseInt(fontColor));
-                fontsizeTv.setTextColor(Integer.parseInt(fontColor));
+            if(!fontColorE.isEmpty()) {
+                fontColor = fontColorE;
+                backgroundTv.setTextColor(Integer.parseInt(fontColorE));
+                fontcolorTv.setTextColor(Integer.parseInt(fontColorE));
+                fontsizeTv.setTextColor(Integer.parseInt(fontColorE));
             }
         }
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fontSize = fontsizeEt.getText().toString();
                 float newFontSize = Float.parseFloat(fontsizeEt.getText().toString());
                 try {
+                    fontSize = fontsizeEt.getText().toString();
                     file = new File(settingFileName);
                     //Here we make the file readable by other applications too.
                     file.setReadable(true, false);
@@ -130,9 +130,9 @@ public class setting extends AppCompatActivity {
             public void onOk(AmbilWarnaDialog dialog, int color) {
                 // color is the color selected by the user.
                 mDefaultColor = color;
-                backgroundColor = Integer.toString(color);
                 getWindow().getDecorView().setBackgroundColor(color);
                 try {
+                    backgroundColor = Integer.toString(color);
                     file = new File(settingFileName);
                     //Here we make the file readable by other applications too.
                     file.setReadable(true, false);
@@ -163,11 +163,11 @@ public class setting extends AppCompatActivity {
             public void onOk(AmbilWarnaDialog dialog, int color) {
                 // color is the color selected by the user.
                 mDefaultColor = color;
-                fontColor = Integer.toString(color);
                 backgroundTv.setTextColor(color);
                 fontcolorTv.setTextColor(color);
                 fontsizeTv.setTextColor(color);
                 try {
+                    fontColor = Integer.toString(color);
                     file = new File(settingFileName);
                     //Here we make the file readable by other applications too.
                     file.setReadable(true, false);
@@ -194,15 +194,9 @@ public class setting extends AppCompatActivity {
 
     private void startActivity() {
         Intent intent = new Intent(getApplication(), MainActivity.class);
-        if(!fontSize.isEmpty()) {
-            intent.putExtra("fontsize", fontSize);
-        }
-        if(!fontColor.isEmpty()) {
-            intent.putExtra("fontcolor", fontColor);
-        }
-        if(!backgroundColor.isEmpty()) {
-            intent.putExtra("backgroundcolor", backgroundColor);
-        }
+        intent.putExtra("fontsize", fontSize);
+        intent.putExtra("fontcolor", fontColor);
+        intent.putExtra("backgroundcolor", backgroundColor);
         startActivityForResult(intent, mainRequestCode);
     }
 
