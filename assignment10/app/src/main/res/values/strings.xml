@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">assignment7</string>
+    <string name="meeting_calendar">Meeting Calendar</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
+    <string name="search">Search</string>
+    <string name="meeting_title">Meeting title</string>
+    <string name="setting_title">Setting title</string>
+    <string name="participants">Participants</string>
+    <string name="start_date">Start date</string>
+    <string name="start_time">Start time</string>
+    <string name="meeting_duration">Meeting duration</string>
+    <string name="submit">Submit</string>
+    <string name="all">All</string>
+    <string name="search_data">Search data</string>
+    <string name="title_activity_search">Search Activity</string>
+    <string name="title_activity_update">Update Activity</string>
+    <string name="title_activity_all">All Activity</string>
+    <string name="search_time">Search time</string>
+    <string name="search_participants">Search participants</string>
+    <string name="back">Back</string>
+    <string name="title_activity_about">About Activity</string>
+    <string name="dir_name">my_files</string>
+    <string name="saving_directory_fb">directory exists?</string>
+    <string name="data_file_name">data.txt</string>
+    <string name="file_save_fb">File saved successfully!</string>
+    <string name="file_load_fb">File loaded successfully!</string>
+</resources>
