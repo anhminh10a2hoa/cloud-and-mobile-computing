@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">assignment7</string>
+    <string name="meeting_calendar">Meeting Calendar</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
+    <string name="search">Search</string>
+    <string name="meeting_title">Meeting title</string>
+    <string name="setting_title">Setting title</string>
+    <string name="participants">Participants</string>
+    <string name="start_date">Start date</string>
+    <string name="start_time">Start time</string>
+    <string name="meeting_duration">Meeting duration</string>
+    <string name="submit">Submit</string>
+    <string name="all">All</string>
+    <string name="search_data">Search data</string>
+    <string name="title_activity_search">Search Activity</string>
+    <string name="title_activity_update">Update Activity</string>
+    <string name="title_activity_all">All Activity</string>
+    <string name="search_time">Search time</string>
+    <string name="search_participants">Search participants</string>
+    <string name="back">Back</string>
+    <string name="title_activity_about">About Activity</string>
+    <string name="dir_name">my_files</string>
+    <string name="saving_directory_fb">directory exists?</string>
+    <string name="data_file_name">data.txt</string>
+    <string name="file_save_fb">File saved successfully!</string>
+    <string name="file_load_fb">File loaded successfully!</string>
+    <string name="not_found">not found!</string>
+
+    <string name="dir_name_database">data/databases</string>
+    <string name="db_name">firm.db</string>
+    <string name="table_name">customer</string>
+    <string name="table_images_name">images</string>
+    <string name="file_not_found">File not found</string>
+    <string name="io_exception">IO exception</string>
+    <string name="file_exists">File exists?</string>
+    <string name="db_class_tag">DBAdapter</string>
+    <string name="db_class_tag2">DBAdapter2</string>
+    <string name="version_upgrade">"Upgrading database from version "</string>
+    <string name="warning_data_delete">All old data will be deleted!</string>
+    <string name="copy_db_warning">Copy database file first!</string>
+    <string name="upgrading_db_version">Upgrading database from version</string>
+    <string name="deleting">Deleting</string>
+    <string-array name="table_customer_column_names">
+        <item>id</item>
+        <item>title</item>
+        <item>participants</item>
+        <item>startTime</item>
+    </string-array>
+    <string-array name="table_customer_column_types">
+        <item>int</item>
+        <item>text</item>
+        <item>text</item>
+        <item>text</item>
+    </string-array>
+    <string-array name="table_images_column_names">
+        <item>image</item>
+        <item>customer_name</item>
+        <item>meeting_id</item>
+    </string-array>
+    <string-array name="table_images_column_types">
+        <item>BLOB</item>
+        <item>text</item>
+        <item>id</item>
+    </string-array>
+</resources>
