@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView startTimeTv;
     private Button loadDataBtn;
     private Button loadSettingBtn;
+    private Button loadFromSdCardBtn;
+    private Button saveToSdCardBtn;
     String path;
     private File file;
     String dataFileName = "user.txt";
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     String fontColor = "";
     String fontSize = "";
     private static final int BLOCK_SIZE = 128;
+    File sdCard, destPathFile;
+    String dirName;
 
     DialogFragment newFragment;
     ArrayList<Meeting> meetingArrayList = new ArrayList<Meeting>();
@@ -68,6 +72,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         path = getFilesDir().getAbsoluteFile() + "/";
+
+        dirName=getResources().getString(R.string.dir_name);
+        dataFileName=getResources().getString(R.string.data_file_name);
+
+        destPathFile= getApplicationContext().getExternalFilesDir(dirName);
+        if(!destPathFile.exists()) {
+            //Here we create the directory on the SD card
+            destPathFile.mkdirs();
+        }
 
         addBtn = findViewById(R.id.button);
         updateBtn = findViewById(R.id.button2);
@@ -88,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         startTimeTv= findViewById(R.id.textView5);
         loadDataBtn = findViewById(R.id.button16);
         loadSettingBtn = findViewById(R.id.button17);
+        loadFromSdCardBtn = findViewById(R.id.button18);
+        saveToSdCardBtn = findViewById(R.id.button19);
+
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -203,6 +219,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        saveToSdCardBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                String title = titleEt.getText().toString();
+                String participants = participantsEt.getText().toString();
+                String startDate = dateTv.getText().toString();
+                String startTime = timeTv.getText().toString();
+                if(TextUtils.isEmpty(title)) {
+                    titleEt.setBackgroundColor(Color.RED);
+                }
+                if(TextUtils.isEmpty(participants)) {
+                    participantsEt.setBackgroundColor(Color.RED);
+                }
+                if(TextUtils.isEmpty(startDate)) {
+                    dateTv.setBackgroundColor(Color.RED);
+                }
+                if(TextUtils.isEmpty(startTime)) {
+                    timeTv.setBackgroundColor(Color.RED);
+                }
+                if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(participants) && !TextUtils.isEmpty(startDate) && !TextUtils.isEmpty(startTime)) {
+                    titleEt.setBackgroundColor(Color.WHITE);
+                    participantsEt.setBackgroundColor(Color.WHITE);
+                    dateTv.setBackgroundColor(Color.WHITE);
+                    timeTv.setBackgroundColor(Color.WHITE);
+                    meetingArrayList.add(new Meeting(meetingArrayList.size(), title, participants, startDate + " " + startTime));
+                    titleEt.setText("");
+                    participantsEt.setText("");
+                    dateTv.setText("");
+                    timeTv.setText("");
+                    try {
+                        File file = new File(destPathFile, dataFileName);
+                        //Here we overwrite the previous file content with the new content
+                        FileOutputStream fileOutputStream = new FileOutputStream(file, false);
+                        //Here we initialize the write stream
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+                        String res = "";
+                        for(Meeting m: meetingArrayList) {
+                            res += m.saveToFile() + "~xyz";
+                        }
+                        //Here we write the text to the file
+                        outputStreamWriter.write(res + "\n");
+                        //Here we close the write stream
+                        outputStreamWriter.close();
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.save_file_confirmation), Toast.LENGTH_LONG).show();
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.io_excp), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
         loadDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                         String[] arr = fileContent.toString().split("~xyz");
                         ArrayList<Meeting> meetingArrayListFromFile = new ArrayList<Meeting>();
                         for (int i = 0; i < arr.length; i++) {
-                            if(arr[i] != "") {
+                            if(arr[i] != "" && arr[i].length() > 10) {
                                 String[] arrData = arr[i].split("~abc");
                                 meetingArrayListFromFile.add(new Meeting(Integer.parseInt(arrData[0]), arrData[1], arrData[2], arrData[3]));
                             }
@@ -238,6 +308,55 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), getString(R.string.io_excp), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        loadFromSdCardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileInputStream fileInputStream;
+                InputStreamReader inputStreamReader;
+                try {
+                    file = new File(destPathFile, dataFileName);
+                    fileInputStream = new FileInputStream(file);
+                    inputStreamReader = new InputStreamReader(fileInputStream);
+                    char[] inputBuffer = new char[BLOCK_SIZE];
+                    StringBuilder fileContent = new StringBuilder();
+                    int charRead;
+                    while ((charRead = inputStreamReader.read(inputBuffer)) > 0) {
+                        // Here we convert chars to string
+                        String readString = String.copyValueOf(inputBuffer, 0,
+                                charRead);
+                        fileContent.append(readString);
+                        // Here we re-initialize the inputBuffer array to remove
+                        // its content
+                        inputBuffer = new char[BLOCK_SIZE];
+                    }
+                    // Here we set the text of the commentEditText to the one,
+                    // which has been read
+                    if(fileContent.toString() != "") {
+                        String[] arr = fileContent.toString().split("~xyz");
+                        ArrayList<Meeting> meetingArrayListFromFile = new ArrayList<Meeting>();
+                        for (int i = 0; i < arr.length; i++) {
+                            if(arr[i] != "" && arr[i].length() > 10) {
+                                String[] arrData = arr[i].split("~abc");
+                                meetingArrayListFromFile.add(new Meeting(Integer.parseInt(arrData[0]), arrData[1], arrData[2], arrData[3]));
+                            }
+                        }
+                        meetingArrayList = meetingArrayListFromFile;
+                    }
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.file_load_fb), Toast.LENGTH_LONG)
+                            .show();
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.file_not_found_excp), Toast.LENGTH_LONG)
+                            .show();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.io_excp), Toast.LENGTH_LONG)
+                            .show();
                 }
             }
         });

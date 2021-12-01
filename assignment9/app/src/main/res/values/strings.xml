@@ -23,4 +23,7 @@
     <string name="file_not_found">File not found!</string>
     <string name="io_excp">Input Output Error !</string>
     <string name="file_load_fb">File loaded successfully!</string>
+    <string name="dir_name">public/data</string>
+    <string name="data_file_name">meetings.txt</string>
+    <string name="file_not_found_excp">File Not Found!</string>
 </resources>
