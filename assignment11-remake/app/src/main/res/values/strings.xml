@@ -16,6 +16,7 @@
     <string name="title_activity_search">Search Activity</string>
     <string name="title_activity_update">Update Activity</string>
     <string name="title_activity_all">All Activity</string>
+    <string name="title_activity_image">Images Activity</string>
     <string name="search_time">Search time</string>
     <string name="search_participants">Search participants</string>
     <string name="back">Back</string>
@@ -30,12 +31,9 @@
     <string name="dir_name_database">data/databases</string>
     <string name="db_name">firm.db</string>
     <string name="table_name">customer</string>
-    <string name="table_images_name">images</string>
     <string name="file_not_found">File not found</string>
     <string name="io_exception">IO exception</string>
     <string name="file_exists">File exists?</string>
-    <string name="db_class_tag">DBAdapter</string>
-    <string name="db_class_tag2">DBAdapter2</string>
     <string name="version_upgrade">"Upgrading database from version "</string>
     <string name="warning_data_delete">All old data will be deleted!</string>
     <string name="copy_db_warning">Copy database file first!</string>
@@ -46,26 +44,4 @@
     <string name="title_activity_select_image">select images</string>
     <string name="null_bitmap">The bitmap is null!</string>
     <string name="returned_value">Returned value</string>
-    <string-array name="table_customer_column_names">
-        <item>id</item>
-        <item>title</item>
-        <item>participants</item>
-        <item>startTime</item>
-    </string-array>
-    <string-array name="table_customer_column_types">
-        <item>int</item>
-        <item>text</item>
-        <item>text</item>
-        <item>text</item>
-    </string-array>
-    <string-array name="table_images_column_names">
-        <item>image</item>
-        <item>customer_name</item>
-        <item>meeting_id</item>
-    </string-array>
-    <string-array name="table_images_column_types">
-        <item>BLOB</item>
-        <item>text</item>
-        <item>id</item>
-    </string-array>
 </resources>

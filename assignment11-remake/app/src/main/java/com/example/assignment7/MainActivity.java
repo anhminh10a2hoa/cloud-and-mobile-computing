@@ -4,27 +4,38 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     int searchRequestCode = 1;
@@ -32,17 +43,10 @@ public class MainActivity extends AppCompatActivity {
     int updateRequestCode = 3;
     int settingRequestCode = 4;
     int aboutRequestCode = 5;
-    int selectImagesRequestCode = 6;
+    int galleryRequestCode=6;
     DBAdapter dbAdapter=null;
-    DBAdapter2 dbAdapter2=null;
-    String dirName;
-    //Here we define the directory path for the database on SD card
-    File dbPathFile;
-    //Here we define the name of the database and the table
-    String dbName;
-    String tableName;
-    String tableImageName;
-    File dbAbsolutePathFileName;
+    public static String dbPath, dbName, dirName;
+    public static File dbPathFile;
 
     private Button addBtn;
     private Button updateBtn;
@@ -58,41 +62,40 @@ public class MainActivity extends AppCompatActivity {
     private Button settingBtn;
     private String preferencesName = "my_setting";
     private Button aboutBtn;
+    private Button openDialogBtn;
 
     private TextView titleTv;
     private TextView meetingTitleTv;
     private TextView participantsTv;
     private TextView startDateTv;
     private TextView startTimeTv;
-    private Button selectImageBtn;
-    ArrayList<ImageParticipants> imageParticipants = new ArrayList<ImageParticipants>();
+    private ImageView imageView;
+    Boolean dbCreated = false;
 
     DialogFragment newFragment;
+    private Dialog imageDialog;
+    ArrayList<String> participantsArray = new ArrayList<String>();
+    ArrayList<Bitmap> images = new ArrayList<Bitmap>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         dbName=getString(R.string.db_name);
-        tableName=getString(R.string.table_name);
-        tableImageName=getString(R.string.table_images_name);
         dirName=getString(R.string.dir_name_database);
         dbPathFile = getApplicationContext().getExternalFilesDir(dirName);
         if(dbPathFile == null) {
             displayMessage(getString(R.string.not_found));
             return;
         }
-//        dbAbsolutePathFileName = new File(dbPathFile.getAbsolutePath() + File.separator + dbName);
-        dbAdapter = new DBAdapter(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName, tableName);
-        dbAdapter2 = new DBAdapter2(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName, tableImageName);
 //        copyDBFile();
+        dbAdapter = new DBAdapter(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName);
 
         //set background color
         SharedPreferences loadedSharedPrefs = getSharedPreferences(preferencesName, MODE_PRIVATE);
 
         getWindow().getDecorView().setBackgroundColor(loadedSharedPrefs.getInt("backgroundcolor", getResources().getColor(android.R.color.white)));
-
-        Bundle extras = getIntent().getExtras();
 
         addBtn = findViewById(R.id.button);
         updateBtn = findViewById(R.id.button2);
@@ -112,20 +115,7 @@ public class MainActivity extends AppCompatActivity {
         startDateTv= findViewById(R.id.textView4);
         startTimeTv= findViewById(R.id.textView5);
         aboutBtn = findViewById(R.id.button16);
-        selectImageBtn = findViewById(R.id.button14);
-
-        if(extras != null && extras.size() != 0) {
-            imageParticipants = (ArrayList<ImageParticipants>)extras.getSerializable("participantsImage");
-            String res = "";
-            for (ImageParticipants im : imageParticipants) {
-                res += im.getImage();
-            }
-            Toast.makeText(getApplicationContext(), res , Toast.LENGTH_LONG).show();
-            participantsEt.setText(extras.getString("participants"));
-            titleEt.setText(extras.getString("meetingTitle"));
-        }
-
-        selectImageBtn.setOnClickListener(selectImageClickListener);
+        openDialogBtn = findViewById(R.id.button19);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         allBtn.setOnClickListener(allClickListener);
 
         aboutBtn.setOnClickListener(aboutClickListener);
+
+        openDialogBtn.setOnClickListener(showImageDialogClick);
 
         timePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,13 +176,11 @@ public class MainActivity extends AppCompatActivity {
                     participantsEt.setBackgroundColor(Color.WHITE);
                     dateTv.setBackgroundColor(Color.WHITE);
                     timeTv.setBackgroundColor(Color.WHITE);
-                    int meetingId = randomId();
-                    long id = dbAdapter.addCustomer(meetingId, title, participants, startDate + " " + startTime);
-//                    dbAdapter2.addImage(meetingId, imageParticipants.get(0).getName(), imageParticipants.get(0).getImage());
-
-//                    for (ImageParticipants im : imageParticipants) {
-//
-//                    }
+//                    meetingArrayList.add(new Meeting(meetingArrayList.size(), title, participants, startDate + " " + startTime));
+                    long id = randomId();
+                    dbAdapter.addCustomer(randomId(), title,startDate + " " + startTime, participantsArray, images);
+                    participantsArray = new ArrayList<String>();
+                    images = new ArrayList<Bitmap>();
                     Toast.makeText(getBaseContext(),
                             "Id " + id + " was added to the database", Toast.LENGTH_LONG)
                             .show();
@@ -243,13 +233,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, aboutRequestCode);
     }
 
-    private void startActivitySelectImages() {
-        Intent intent = new Intent(getApplication(), select_images.class);
-        intent.putExtra("data", participantsEt.getText().toString());
-        intent.putExtra("title", titleEt.getText().toString());
-        startActivityForResult(intent, selectImagesRequestCode);
-    }
-
     private View.OnClickListener searchClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -285,18 +268,37 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private View.OnClickListener selectImageClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivitySelectImages();
-        }
-    };
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == searchRequestCode) {
-            if(resultCode == RESULT_OK) {
-
+        if (requestCode == galleryRequestCode) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri selectedImageUri = data.getData();
+                //Here we set the text of imagePathEditText the directory path of the
+                //selected image
+                InputStream inputStream = null;
+                Bitmap bitmap = null;
+                try {
+                    //We call the decodeFile() method to scale down the image
+                    bitmap = decodeFile(selectedImageUri);
+                    //Here we set the image of the ImageView to the selected image
+                    if (bitmap != null) {
+                        Toast.makeText(getApplicationContext(), bitmap.toString() , Toast.LENGTH_LONG).show();
+                        imageView.setImageBitmap(bitmap);
+                    } else {
+                        displayToast(getString(R.string.null_bitmap));
+                    }
+                } catch (FileNotFoundException e) {
+                    displayToast(e.getLocalizedMessage());
+                } catch (IOException e) {
+                    displayToast(e.getLocalizedMessage());
+                } finally {
+                    if (inputStream != null)
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            displayToast(e.getLocalizedMessage());
+                        }
+                }
             }
         }
     }
@@ -308,7 +310,103 @@ public class MainActivity extends AppCompatActivity {
         return b;
     }
 
-    private void displayMessage(String text) {
+    private View.OnClickListener showImageDialogClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showImageDialog();
+        }
+    };
+
+    void showImageDialog() {
+        imageDialog = new Dialog(MainActivity.this);
+        imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        imageDialog.setCancelable(true);
+        imageDialog.setContentView(R.layout.activity_image_dialog);
+
+        EditText participantsText = imageDialog.findViewById(R.id.editTextTextPersonName6);
+        imageView = imageDialog.findViewById(R.id.imageView);
+        final Button selectImageButton = imageDialog.findViewById(R.id.button14);
+        final Button addImageButton = imageDialog.findViewById(R.id.button18);
+
+        selectImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //Here we invoke the gallery application to pick an image
+                startActivityForResult(Intent.createChooser(galleryIntent, getString(R.string.select_image_title)), galleryRequestCode);
+
+            }
+        });
+
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                participantsArray.add(participantsText.getText().toString());
+                images.add(((BitmapDrawable) imageView.getDrawable()).getBitmap());
+                participantsEt.append(participantsText.getText().toString() + ",");
+                imageDialog.dismiss();
+            }
+        });
+
+        imageDialog.show();
+    }
+
+    private Bitmap decodeFile(Uri selectedImageUri) throws IOException {
+        //Here we open an input stream to access the content of the image
+        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+        //Decode image size
+        BitmapFactory.Options imageSizeOptions = new BitmapFactory.Options();
+        //If set to true, the decoder will return null (no bitmap), but
+        //the out... fields will still be set, allowing the caller to query
+        //the bitmap without having to allocate the memory for its pixels.
+        imageSizeOptions.inJustDecodeBounds = true;
+        //Here we fetch image meta data
+        BitmapFactory.decodeStream(inputStream, null, imageSizeOptions);
+        //The new size we want to scale to
+        final int REQUIRED_SIZE=150;
+        //Here we find the correct scale value. It should be a power of 2.
+        int scale=1;
+        //Here we scale the result height and width of the image based on the required size
+        while(imageSizeOptions.outWidth/scale/2>=REQUIRED_SIZE && imageSizeOptions.outHeight/scale/2>=REQUIRED_SIZE)
+            scale*=2;
+        //Decode with inSampleSize
+        BitmapFactory.Options inSampleSizeOption = new BitmapFactory.Options();
+        //Here we do the actual decoding. If set to a value > 1, requests the decoder to subsample the
+        //original image, returning a smaller image to save memory. The
+        //sample size is the number of pixels in either dimension that correspond
+        //to a single pixel in the decoded bitmap.
+        inSampleSizeOption.inSampleSize=scale;
+        inputStream.close();
+        //Here we initialize the inputStream again
+        inputStream = getContentResolver().openInputStream(selectedImageUri);
+        return BitmapFactory.decodeStream(inputStream, null, inSampleSizeOption);
+    }
+    //This method decodes image and scales it to reduce memory consumption
+    private Bitmap decodeFile(File imageFile){
+        try {
+            //Decode image size
+            BitmapFactory.Options imageSizeOptions = new BitmapFactory.Options();
+            //If set to true, the decoder will return null (no bitmap), but
+            //the out... fields will still be set, allowing the caller to query
+            //the bitmap without having to allocate the memory for its pixels.
+            imageSizeOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(imageFile), null, imageSizeOptions);
+            //The new size we want to scale to
+            final int REQUIRED_SIZE=70;
+            //Here we find the correct scale value. It should be a power of 2.
+            int scale=1;
+            while(imageSizeOptions.outWidth/(scale*2)>=REQUIRED_SIZE && imageSizeOptions.outHeight/(scale*2)>=REQUIRED_SIZE)
+                scale*=2;
+            //Here we decode with inSampleSize
+            BitmapFactory.Options inSampleSizeOption = new BitmapFactory.Options();
+            inSampleSizeOption.inSampleSize=scale;
+            return BitmapFactory.decodeStream(new FileInputStream(imageFile), null, inSampleSizeOption);
+        } catch (FileNotFoundException e) {}
+        return null;
+    }
+
+    private void displayToast(String text) {
         Toast.makeText(getApplicationContext(), text , Toast.LENGTH_LONG).show();
     }
 
@@ -318,6 +416,7 @@ public class MainActivity extends AppCompatActivity {
             this.dbPathFile.mkdirs();
         }
         File dbNameFile = new File(dbName);
+        File dbAbsolutePathFileName = new File(dbPathFile.getAbsolutePath() + File.separator + dbName);
         //Here we check whether the database file exists or not. If not, we then create it
         if(!dbNameFile.exists()) {
             try {
@@ -333,7 +432,11 @@ public class MainActivity extends AppCompatActivity {
         //Here we display feedback on whether the database file has been successfully copied or not.
         displayMessage(getString(R.string.file_exists) + " " + dbAbsolutePathFileName.exists() + "\n" + dbAbsolutePathFileName.getAbsolutePath());
         //Here we initialize the dbAdapter object
-        dbAdapter = new DBAdapter(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName, tableName );
+        dbAdapter = new DBAdapter(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName);
+        //Here we indicate that the database file has been copied successfully.
+        dbCreated=true;
+        //Here we call getAllCustomers() method to show that the database
+        //file has been successfully copied.
     }
 
     private void copyDB(InputStream inputStream, OutputStream outputStream) {
@@ -349,5 +452,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             displayMessage(getString(R.string.io_exception) + ": " + e.getLocalizedMessage());
         }
+    }
+
+    private void displayMessage(String text) {
+        Toast.makeText(getApplicationContext(), text , Toast.LENGTH_LONG).show();
+    }
+
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
+    }
+    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+        return is.readObject();
     }
 }

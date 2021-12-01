@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,10 @@ public class All extends AppCompatActivity {
     int mainRequestCode = 0;
     private Button backButton;
     private TextView dataTv;
+    private EditText meetingId;
+    private EditText participantName;
+    private Button whatImageButton;
+    private ImageView imageView;
     private String preferencesName = "my_setting";
     DBAdapter dbAdapter=null;
     String dirName;
@@ -25,14 +33,18 @@ public class All extends AppCompatActivity {
     File dbPathFile;
     //Here we define the name of the database and the table
     String dbName;
+    DBAdapter2 dbAdapter2=null;
     String tableName;
+    String tableImageName;
     File dbAbsolutePathFileName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all);
         dbName=getString(R.string.db_name);
         tableName=getString(R.string.table_name);
+        tableImageName=getString(R.string.table_images_name);
         dirName=getString(R.string.dir_name_database);
         dbPathFile = getApplicationContext().getExternalFilesDir(dirName);
         if(dbPathFile == null) {
@@ -41,14 +53,18 @@ public class All extends AppCompatActivity {
         }
         dbAbsolutePathFileName = new File(dbPathFile.getAbsolutePath() + File.separator + dbName);
         dbAdapter = new DBAdapter(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName, tableName );
+        dbAdapter2 = new DBAdapter2(getApplicationContext(), this.dbPathFile.getAbsolutePath() + File.separator, dbName, tableImageName);
 
         SharedPreferences loadedSharedPrefs = getSharedPreferences(preferencesName, MODE_PRIVATE);
 
         getWindow().getDecorView().setBackgroundColor(loadedSharedPrefs.getInt("backgroundcolor", getResources().getColor(android.R.color.white)));
-        
+
 
         backButton = findViewById(R.id.button8);
+        whatImageButton = findViewById(R.id.button21);
         dataTv = findViewById(R.id.textView6);
+        meetingId = findViewById(R.id.editTextTextPersonName8);
+        participantName = findViewById(R.id.editTextTextPersonName9);
         backButton.setOnClickListener(backClickListener);
         dataTv.setText(displayData(dbAdapter.getAllCustomers()));
 
@@ -57,6 +73,26 @@ public class All extends AppCompatActivity {
 
         int fontColor = loadedSharedPrefs.getInt("fontcolor", getResources().getColor(android.R.color.black));
         dataTv.setTextColor(fontColor);
+
+        whatImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mtId = meetingId.getText().toString();
+                String name = participantName.getText().toString();
+                if(TextUtils.isEmpty(mtId)) {
+                    meetingId.setBackgroundColor(Color.RED);
+                }
+                if(TextUtils.isEmpty(name)) {
+                    participantName.setBackgroundColor(Color.RED);
+                }
+                if(!TextUtils.isEmpty(mtId) && !TextUtils.isEmpty(name)) {
+                    int meetingIdToInt = Integer.parseInt(mtId);
+                    meetingId.setBackgroundColor(Color.WHITE);
+                    participantName.setBackgroundColor(Color.WHITE);
+                    displayMessage(displayData(dbAdapter2.getImage(meetingIdToInt, name)));
+                }
+            }
+        });
     }
 
     private void startActivity() {

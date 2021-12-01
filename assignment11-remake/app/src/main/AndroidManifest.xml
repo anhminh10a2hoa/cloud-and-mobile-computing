@@ -10,14 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment7">
         <activity
-            android:name=".select_images"
+            android:name=".image_dialog"
             android:exported="true"
-            android:label="@string/title_activity_select_image">
-            <intent-filter>
-                <action android:name="myapp.SelectImagesActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:label="@string/title_activity_image">
         </activity>
         <activity
             android:name=".about"

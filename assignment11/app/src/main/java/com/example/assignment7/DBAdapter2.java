@@ -75,8 +75,7 @@ public class DBAdapter2 {
         dbHelper.close();
     }
     //Here we add a customer to the database
-    public long addCustomer(int id, String customerName, Bitmap image) {
-        long result;
+    public void addImage(int id, String customerName, Bitmap image) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(tableColumnNames[1], customerName);
         initialValues.put(tableColumnNames[2], id);
@@ -92,12 +91,9 @@ public class DBAdapter2 {
             //Here we set the image to be saved under image column
             initialValues.put(tableColumnNames[0], outputStream.toByteArray());
             openDBConnection();
-            result = sqlLiteDb.insert(tableName, null, initialValues);
+            sqlLiteDb.insert(tableName, null, initialValues);
             closeDBConnection();
-        } else {
-            result = -1;
         }
-        return result;
     }
     public boolean deleteCustomer(long rowID) {
         openDBConnection();
@@ -128,17 +124,9 @@ public class DBAdapter2 {
         return dataRows;
     }
     //This method will retrieve all customers
-    public Vector<Object[]> getAllCustomers() {
+    public Vector<Object[]> getImage(int meetingId, String name) {
         openDBConnection();
-        Cursor cursor = sqlLiteDb.query(tableName, new String[]{tableColumnNames[0], tableColumnNames[1], tableColumnNames[2]}, null, null, null, null, null);
-        Vector<Object[]> dataRows= getRowData(cursor);
-        closeDBConnection();
-        return dataRows;
-    }
-    public Vector<Object[]> getCustomer(long rowID) {
-        openDBConnection();
-        Cursor cursor = sqlLiteDb.query(true, tableName, new String[]{tableColumnNames[0], tableColumnNames[1], tableColumnNames[2]},
-                tableColumnNames[0] + "=" + rowID, null, null, null, null, null);
+        Cursor cursor = sqlLiteDb.rawQuery("SELECT * FROM " + tableName  + " WHERE " + tableColumnNames[1] + " LIKE '%" +name + "%'", null);
         Vector<Object[]> dataRows= getRowData(cursor);
         closeDBConnection();
         return dataRows;
